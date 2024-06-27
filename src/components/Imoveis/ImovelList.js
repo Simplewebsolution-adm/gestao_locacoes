@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { formatCurrency } from '../../utils/formatCurrency'; 
 import imovelService from '../../services/imovelService'; 
 
 const ImovelList = () => {
@@ -35,7 +34,7 @@ const ImovelList = () => {
           {imoveis.map(imovel => (
             <tr key={imovel.id}>
               <td>{imovel.descricao}</td>
-              <td>{formatCurrency(imovel.endereco)}</td>
+              <td>{imovel.endereco}</td>
               <td>
                 <Link to={`/imoveis/${imovel.id}/editar`} className="btn btn-warning btn-sm btn-spacing" title="Alterar">
                   <i className="fas fa-edit"></i>

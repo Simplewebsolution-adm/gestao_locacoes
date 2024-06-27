@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import imovelService from '../../services/imovelService'; 
-import styles from './css/ImovelDetails.module.css'; // Importe o módulo CSS
+import styles from './css/ImovelDetails.module.css'; 
 
 const ImovelDetails = () => {
   const { id } = useParams();

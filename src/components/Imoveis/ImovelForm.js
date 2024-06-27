@@ -43,9 +43,9 @@ const ImovelForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (id) {
-      imovelService.updateImovel(imovel);
+      imovelService.atualizarImovel(imovel);
     } else {
-      imovelService.createImovel(imovel);
+      imovelService.adicionarImovel(imovel);
     }
     navigate('/imoveis');
   };
@@ -69,7 +69,7 @@ const ImovelForm = () => {
               </div>
             </div>
             <div className={`form-group row ${styles.linha}`}>
-              <label className={`col-sm-3 col-form-label ${styles.textRight}`}>Valor</label>
+              <label className={`col-sm-3 col-form-label ${styles.textRight}`}>Endereço</label>
               <div className={styles.colSm9}>
                 <input
                   type="text"
