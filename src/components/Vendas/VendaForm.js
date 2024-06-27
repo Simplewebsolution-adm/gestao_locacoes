@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { formatCurrency } from './../../utils/formatCurrency';
 import vendaService from './../../services/vendaService';
 import clienteService from './../../services/clienteService';
-import produtoService from './../../services/produtoService';
+import imovelService from './../../services/imovelService';
 import styles from './css/VendaForm.module.css'; // Importe o módulo CSS
 
 const VendaForm = () => {
@@ -11,35 +11,35 @@ const VendaForm = () => {
   const navigate = useNavigate();
   const [venda, setVenda] = useState({
     clienteId: '',
-    produtoId: '',
+    imovelId: '',
     dataVenda: new Date().toISOString().split('T')[0],
     formaPagamento: 'DINHEIRO',
     quantidade: 1,
     valorVenda: 0,
   });
   const [clientes, setClientes] = useState([]);
-  const [produtos, setProdutos] = useState([]);
+  const [imoveis, setImoveis] = useState([]);
   const [valorUnitario, setValorUnitario] = useState(0);
   const [valorVendaFormatado, setValorVendaFormatado] = useState('R$ 0,00');
 
   useEffect(() => {
     const fetchData = async () => {
       const clientesData = await clienteService.getListaClientes();
-      const produtosData = await produtoService.getListaProdutos();
+      const imoveisData = await imovelService.getListaImoveis();
 
       setClientes(clientesData);
-      setProdutos(produtosData);
+      setImoveis(imoveisData);
 
       if (id) {
         const vendaId = parseInt(id);
         const vendaEncontrada = await vendaService.getVendaById(vendaId);
         if (vendaEncontrada) {
           const clienteId = vendaEncontrada.clienteId;
-          const produtoId = vendaEncontrada.produtoId;
+          const imovelId = vendaEncontrada.imovelId;
           setVenda({
             ...vendaEncontrada,
           });
-          setValorUnitario(parseFloat(produtosData.find(p => p.id === produtoId).valor.replace(",", ".")));
+          setValorUnitario(parseFloat(imoveisData.find(p => p.id === imovelId).valor.replace(",", ".")));
           setValorVendaFormatado(formatCurrency(vendaEncontrada.valorVenda));
         }
       }
@@ -51,8 +51,8 @@ const VendaForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'produtoId') {
-      const novoValorUnitario = parseFloat(produtos.find(p => p.id === parseInt(value)).valor.replace(",", "."));
+    if (name === 'imovelId') {
+      const novoValorUnitario = parseFloat(imoveis.find(p => p.id === parseInt(value)).valor.replace(",", "."));
       setValorUnitario(novoValorUnitario);
       const novoValorVenda = novoValorUnitario * venda.quantidade;
       setVenda({
@@ -113,18 +113,18 @@ const VendaForm = () => {
               </div>
             </div>
             <div className={`form-group ${styles.row} ${styles.linha}`}>
-              <label className={`${styles.colSm3} col-form-label ${styles.textRight}`}>Produto</label>
+              <label className={`${styles.colSm3} col-form-label ${styles.textRight}`}>Imovel</label>
               <div className={styles.colSm9}>
                 <select
-                  name="produtoId"
-                  value={venda.produtoId}
+                  name="imovelId"
+                  value={venda.imovelId}
                   onChange={handleChange}
                   className="form-control"
                   required
                 >
-                  <option value="">Selecione um produto</option>
-                  {produtos.map(produto => (
-                    <option key={produto.id} value={produto.id}>{produto.descricao}</option>
+                  <option value="">Selecione um imovel</option>
+                  {imoveis.map(imovel => (
+                    <option key={imovel.id} value={imovel.id}>{imovel.descricao}</option>
                   ))}
                 </select>
               </div>

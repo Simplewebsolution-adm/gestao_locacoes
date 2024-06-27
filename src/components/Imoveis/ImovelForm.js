@@ -1,48 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom'; 
-import { formatCurrency } from './../../utils/formatCurrency'; 
-import produtoService from './../../services/produtoService';
-import styles from './css/ProdutoForm.module.css'; // Importe o módulo CSS
+import imovelService from '../../services/imovelService';
+import styles from './css/ImovelForm.module.css'; 
 
-const ProdutoForm = () => {
+const ImovelForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [produto, setProduto] = useState({
+  const [imovel, setImovel] = useState({
     descricao: '',
-    valor: 0
+    endereco: ''
   });
-  const [valorFormatado, setValorFormatado] = useState('R$ 0,00');
 
   useEffect(() => {
     if (id) {
-      const produtoId = parseInt(id);
-      const produtoEncontrado = produtoService.getProdutoById(produtoId);
-      setProduto(produtoEncontrado);
-      setValorFormatado(formatCurrency(produtoEncontrado.valor));
-    } else {
-      setValorFormatado(formatCurrency(0)); 
-    }
+      const imovelId = parseInt(id);
+      const imovelEncontrado = imovelService.getImovelById(imovelId);
+      setImovel(imovelEncontrado);
+    } 
   }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'valor') {
-      const valorNumerico = value.replace(/\D/g, '');
-      const valorFormatado = formatCurrency(Number(valorNumerico) / 100);
-      setProduto({
-        ...produto,
-        [name]: Number(valorNumerico) / 100
+    if (name === 'endereco') {
+      setImovel({
+        ...imovel,
+        [name]: value.toUpperCase()
       });
-      setValorFormatado(valorFormatado);
     } else if (name === 'descricao') {
-      setProduto({
-        ...produto,
+      setImovel({
+        ...imovel,
         [name]: value.toUpperCase()
       });
     } else {
-      setProduto({
-        ...produto,
+      setImovel({
+        ...imovel,
         [name]: value
       });
     }
@@ -51,16 +43,16 @@ const ProdutoForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (id) {
-      produtoService.updateProduto(produto);
+      imovelService.updateImovel(imovel);
     } else {
-      produtoService.createProduto(produto);
+      imovelService.createImovel(imovel);
     }
-    navigate('/produtos');
+    navigate('/imoveis');
   };
 
   return (
-    <div className={styles.produtoForm}>
-      <h4>{id ? 'Alterar Produto' : 'Novo Produto'}</h4>
+    <div className={styles.imovelForm}>
+      <h4>{id ? 'Alterar Imovel' : 'Novo Imovel'}</h4>
       <div className={styles.row}>
         <div className="col-md-10">
           <form onSubmit={handleSubmit} className="my-14">
@@ -70,7 +62,7 @@ const ProdutoForm = () => {
                 <input
                   type="text"
                   name="descricao"
-                  value={produto.descricao.toUpperCase()}
+                  value={imovel.descricao.toUpperCase()}
                   onChange={handleChange}
                   className="form-control"
                 />
@@ -81,8 +73,8 @@ const ProdutoForm = () => {
               <div className={styles.colSm9}>
                 <input
                   type="text"
-                  name="valor"
-                  value={valorFormatado}
+                  name="endereco"
+                  value={imovel.endereco.toUpperCase()}
                   onChange={handleChange}
                   className="form-control"
                 />
@@ -91,7 +83,7 @@ const ProdutoForm = () => {
             <div className={`form-group row ${styles.linha}`}>
               <div className={`${styles.colSm9} offset-sm-3`}>
                 <button type="submit" className={`btn btn-primary ${styles.floatEnd}`}>Salvar</button>
-                <Link to="/produtos" className={`btn btn-primary btn-md ${styles.floatEnd} ${styles.btnSpacing}`} title="Voltar">
+                <Link to="/imoveis" className={`btn btn-primary btn-md ${styles.floatEnd} ${styles.btnSpacing}`} title="Voltar">
                   <i className="fas fa-arrow-left"></i>
                 </Link>
               </div>
@@ -103,4 +95,4 @@ const ProdutoForm = () => {
   );
 };
 
-export default ProdutoForm;
+export default ImovelForm;

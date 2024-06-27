@@ -4,14 +4,14 @@ import { formatCurrency } from './../../utils/formatCurrency';
 import { formatDate } from './../../utils/formatData';
 import vendaService from './../../services/vendaService';
 import clienteService from './../../services/clienteService';
-import produtoService from './../../services/produtoService';
+import imovelService from './../../services/imovelService';
 import styles from './css/VendaDetails.module.css'; 
 
 const VendaDetails = () => {
   const { id } = useParams();
   const [venda, setVenda] = useState(null);
   const [cliente, setCliente] = useState(null);
-  const [produto, setProduto] = useState(null);
+  const [imovel, setImovel] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,8 +21,8 @@ const VendaDetails = () => {
       const clienteData = await clienteService.getClienteById(vendaData.clienteId);
       setCliente(clienteData);
 
-      const produtoData = await produtoService.getProdutoById(vendaData.produtoId);
-      setProduto(produtoData);
+      const imovelData = await imovelService.getImovelByIdById(vendaData.imovelId);
+      setImovel(imovelData);
     };
 
     fetchData();
@@ -39,8 +39,8 @@ const VendaDetails = () => {
       <dl className="row">
         <dt className={styles.colSm2}>Cliente</dt>
         <dd className={styles.colSm10}>{cliente?.nome}</dd>
-        <dt className={styles.colSm2}>Produto</dt>
-        <dd className={styles.colSm10}>{produto?.descricao}</dd>
+        <dt className={styles.colSm2}>Imovel</dt>
+        <dd className={styles.colSm10}>{imovel?.descricao}</dd>
         <dt className={styles.colSm2}>Data da Venda</dt>
         <dd className={styles.colSm10}>{formatDate(venda.dataVenda)}</dd>
         <dt className={styles.colSm2}>Forma de Pagamento</dt>

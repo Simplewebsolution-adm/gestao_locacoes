@@ -4,7 +4,7 @@ import { formatCurrency } from './../../utils/formatCurrency';
 import { formatDate } from './../../utils/formatData';
 import vendaService from './../../services/vendaService';
 import clienteService from './../../services/clienteService';
-import produtoService from './../../services/produtoService';
+import imovelService from './../../services/imovelService';
 
 const VendaList = () => {
   const [vendas, setVendas] = useState([]);
@@ -13,12 +13,12 @@ const VendaList = () => {
     const fetchData = async () => {
       const vendasData = vendaService.getListaVendas();
       const clientesData = await clienteService.getListaClientes();
-      const produtosData = await produtoService.getListaProdutos();
+      const imoveisData = await imovelService.getListaImoveis();
 
       const vendasComNomes = vendasData.map(venda => {
         const cliente = clientesData.find(cliente => cliente.id === venda.clienteId)?.nome || '';
-        const produto = produtosData.find(produto => produto.id === venda.produtoId)?.descricao || '';
-        return { ...venda, cliente, produto };
+        const imovel = imoveisData.find(imovel => imovel.id === venda.imovelId)?.descricao || '';
+        return { ...venda, cliente, imovel };
       });
 
       setVendas(vendasComNomes);
@@ -46,7 +46,7 @@ const VendaList = () => {
         <thead>
           <tr>
             <th>Cliente</th>
-            <th>Produto</th>
+            <th>imovel</th>
             <th>Data da Venda</th>
             <th>Forma de Pagamento</th>
             <th>Quantidade</th>
@@ -58,7 +58,7 @@ const VendaList = () => {
           {vendas.map(venda => (
             <tr key={venda.id}>
               <td>{venda.cliente}</td>
-              <td>{venda.produto}</td>
+              <td>{venda.imovel}</td>
               <td>{formatDate(venda.dataVenda)}</td>
               <td>{venda.formaPagamento}</td>
               <td>{venda.quantidade}</td>

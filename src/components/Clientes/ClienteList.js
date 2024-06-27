@@ -26,7 +26,7 @@ const ClienteList = () => {
         <thead>
           <tr>
             <th>Nome</th>
-            <th>Email</th>
+            <th>CPF</th>
             <th>Telefone</th>
             <th>Ações</th>
           </tr>
@@ -35,7 +35,7 @@ const ClienteList = () => {
           {clientes.map(cliente => (
             <tr key={cliente.id}>
               <td>{cliente.nome}</td>
-              <td>{cliente.email}</td>
+              <td>{cliente.cpf}</td>
               <td>{cliente.telefone}</td>
               <td>
                 <Link to={`/clientes/${cliente.id}/editar`} className="btn btn-warning btn-sm btn-spacing" title="Alterar">

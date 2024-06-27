@@ -5,9 +5,9 @@ import ClienteList from './components/Clientes/ClienteList';
 import ClienteForm from './components/Clientes/ClienteForm';
 import ClienteDetails from './components/Clientes/ClienteDetails';
 
-import ProdutoList from './components/Produtos/ProdutoList';
-import ProdutoForm from './components/Produtos/ProdutoForm';
-import ProdutoDetails from './components/Produtos/ProdutoDetails';
+import ImovelList from './components/Imoveis/ImovelList';
+import ImovelForm from './components/Imoveis/ImovelForm';
+import ImovelDetails from './components/Imoveis/ImovelDetails';
 
 import CompraList from './components/Compras/CompraList';
 import CompraForm from './components/Compras/CompraForm';
@@ -41,10 +41,10 @@ function App() {
                 <Route path="/clientes/:id/editar" element={<ClienteForm />} />
                 <Route path="/clientes/details/:id" element={<ClienteDetails />} />
 
-                <Route path="/produtos" element={<ProdutoList />} />
-                <Route path="/produtos/novo" element={<ProdutoForm />} />
-                <Route path="/produtos/:id/editar" element={<ProdutoForm />} />
-                <Route path="/produtos/details/:id" element={<ProdutoDetails />} />
+                <Route path="/imoveis" element={<ImovelList />} />
+                <Route path="/imoveis/novo" element={<ImovelForm />} />
+                <Route path="/imoveis/:id/editar" element={<ImovelForm />} />
+                <Route path="/imoveis/details/:id" element={<ImovelDetails />} />
 
                 <Route path="/compras" element={<CompraList />} />
                 <Route path="/compras/novo" element={<CompraForm />} />
