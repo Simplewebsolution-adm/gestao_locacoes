@@ -1,0 +1,39 @@
+.produtoForm {
+    margin: 20px;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+  
+  .colSm3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+    text-align: right !important;
+  }
+  
+  .colSm9 {
+    flex: 0 0 75%;
+    max-width: 75%;
+    text-align: left !important;
+  }
+  
+  .btnSpacing {
+    margin-right: 5px;
+  }
+  
+  .textRight {
+    text-align: right !important;
+    font-weight: bold;
+  }
+  
+  .linha {
+    margin-bottom: 10px;
+  }
+  
+  .floatEnd {
+    float: right;
+  }
+  

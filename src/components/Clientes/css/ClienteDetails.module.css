@@ -1,0 +1,26 @@
+.clienteDetails {
+  margin: 20px;
+}
+
+.btnSpacing {
+  margin-right: 5px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.colSm3 {
+  flex: 0 0 30%;
+  max-width: 30%;
+  text-align: right;
+  padding-right: 15px; 
+}
+
+.colSm9 {
+  flex: 0 0 70%;
+  max-width: 70%;
+  text-align: left;
+}

@@ -1,0 +1,28 @@
+.vendaDetails {
+    margin: 20px;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+  
+  .colSm2 {
+    flex: 0 0 30%;
+    max-width: 30%;
+    text-align: right;
+    padding-right: 15px; /* Adiciona espaçamento à direita */
+  }
+  
+  .colSm10 {
+    flex: 0 0 70%;
+    max-width: 70%;
+    text-align: left;
+  }
+  
+  .btnSpacing {
+    margin-right: 5px;
+  }
+
+  

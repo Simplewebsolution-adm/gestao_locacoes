@@ -1,0 +1,27 @@
+.produtoDetails {
+    margin: 20px;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+  
+  .colSm2 {
+    flex: 0 0 20%;
+    max-width: 20%;
+    text-align: right !important;
+    padding-right: 15px; 
+  }
+  
+  .colSm10 {
+    flex: 0 0 80%;
+    max-width: 80%;
+    text-align: left !important;
+  }
+  
+  .btnSpacing {
+    margin-right: 5px;
+  }
+  
