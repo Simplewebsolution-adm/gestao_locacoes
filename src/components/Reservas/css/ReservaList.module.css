@@ -1,0 +1,17 @@
+/* formatação da coluna de ações */
+.action-buttons {
+    white-space: nowrap;
+  }
+  
+  .action-buttons .btn-spacing {
+    margin-right: 5px; /* Ajuste o valor conforme necessário */
+  }
+  
+  .action-buttons .btn-spacing:last-child {
+    margin-right: 0;
+  }
+  
+/* Centralizar verticalmente o conteúdo das células da tabela */
+.table td, .table th {
+    vertical-align: middle;
+  }

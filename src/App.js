@@ -13,9 +13,9 @@ import CompraList from './components/Compras/CompraList';
 import CompraForm from './components/Compras/CompraForm';
 import CompraDetails from './components/Compras/CompraDetails';
 
-import VendaList from './components/Vendas/VendaList';
-import VendaForm from './components/Vendas/VendaForm';
-import VendaDetails from './components/Vendas/VendaDetails';
+import ReservaList from './components/Reservas/ReservaList';
+import ReservaForm from './components/Reservas/ReservaForm';
+import ReservaDetails from './components/Reservas/ReservaDetails';
 
 import CadastroForm from './components/Auth/CadastroForm';
 import LoginForm from './components/Auth/LoginForm';
@@ -51,10 +51,10 @@ function App() {
                 <Route path="/compras/:id/editar" element={<CompraForm />} />
                 <Route path="/compras/details/:id" element={<CompraDetails />} />
 
-                <Route path="/vendas" element={<VendaList />} />
-                <Route path="/vendas/novo" element={<VendaForm />} />
-                <Route path="/vendas/:id/editar" element={<VendaForm />} />
-                <Route path="/vendas/details/:id" element={<VendaDetails />} />
+                <Route path="/reservas" element={<ReservaList />} />
+                <Route path="/reservas/novo" element={<ReservaForm />} />
+                <Route path="/reservas/:id/editar" element={<ReservaForm />} />
+                <Route path="/reservas/details/:id" element={<ReservaDetails />} />
               </Routes>
             </div>
           </div>

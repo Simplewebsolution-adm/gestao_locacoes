@@ -23,8 +23,8 @@ const Navbar = () => {
             <div className="navbar-main">
               <li><Link to="/clientes">Clientes</Link></li>
               <li><Link to="/imoveis">Imóveis</Link></li>
-              <li><Link to="/vendas">Vendas</Link></li>
-              <li><Link to="/compras">Compras</Link></li>
+              <li><Link to="/reservas">Reservas</Link></li>
+              {/* <li><Link to="/compras">Compras</Link></li> */}
             </div>
             <div className="navbar-user-container">
               <li className="navbar-user">
