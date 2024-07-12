@@ -33,6 +33,30 @@ const ReservaForm = () => {
   const [valorComissaoFormatado, setValorComissaoFormatado] =
     useState("R$ 0,00");
   const [taxaLimpezaFormatado, setTaxaLimpezaFormatado] = useState("R$ 0,00");
+  const [opcoesOrigem, setOpcoesOrigem] = useState([
+    { value: "", label: "Selecione a origem" },
+    { value: "Particular", label: "Particular" },
+    { value: "Airbnb", label: "Airbnb" },
+    { value: "Booking", label: "Booking" },
+    { value: "Decolar", label: "Decolar" },
+    { value: "Outros", label: "Outros" },
+  ]);
+  const [opcoesFormaPagamento, setOpcoesFormaPagamento] = useState([
+    { value: "", label: "Selecione a forma de pagamento" },
+    { value: "App", label: "App" },
+    { value: "Cartão de Crédito", label: "Cartão de Crédito" },
+    { value: "PIX", label: "PIX" },
+    { value: "Dinheiro", label: "Dinheiro" },
+    { value: "Depósito Bancário", label: "Depósito Bancário" },
+    { value: "Outros", label: "Outros" },
+  ]);
+  const [opcoesSituacao, setOpcoesSituacao] = useState([
+    { value: "", label: "Selecione a situação" },
+    { value: "Reservado", label: "Reservado" },
+    { value: "Cancelado", label: "Cancelado" },
+    { value: "Confirmar", label: "Confirmar" },
+    { value: "Pagamento Pendente", label: "Pagamento Pendente" },
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,6 +91,59 @@ const ReservaForm = () => {
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    // Atualiza opções de origem conforme modalidade selecionada
+    if (reserva.modalidade === "temporada") {
+      setOpcoesOrigem([
+        { value: "", label: "Selecione a origem" },
+        { value: "Particular", label: "Particular" },
+        { value: "Airbnb", label: "Airbnb" },
+        { value: "Booking", label: "Booking" },
+        { value: "Decolar", label: "Decolar" },
+        { value: "Outros", label: "Outros" },
+      ]);
+      setOpcoesFormaPagamento([
+        { value: "", label: "Selecione a forma de pagamento" },
+        { value: "App", label: "App" },
+        { value: "Cartão de Crédito", label: "Cartão de Crédito" },
+        { value: "PIX", label: "PIX" },
+        { value: "Dinheiro", label: "Dinheiro" },
+        { value: "Depósito Bancário", label: "Depósito Bancário" },
+        { value: "Outros", label: "Outros" },
+      ]);
+      setOpcoesSituacao([
+        { value: "", label: "Selecione a situação" },
+        { value: "Reservado", label: "Reservado" },
+        { value: "Cancelado", label: "Cancelado" },
+        { value: "Confirmar", label: "Confirmar" },
+        { value: "Pagamento Pendente", label: "Pagamento Pendente" },
+      ]);
+    } else if (reserva.modalidade === "fixa") {
+      setOpcoesOrigem([
+        { value: "", label: "Selecione a origem" },
+        { value: "Particular", label: "Particular" },
+        { value: "Imobiliária", label: "Imobiliária" },
+        { value: "Outros", label: "Outros" },
+      ]);
+      setOpcoesFormaPagamento([
+        { value: "", label: "Selecione a forma de pagamento" },
+        { value: "Boleto", label: "Boleto" },
+        { value: "Cartão de Crédito", label: "Cartão de Crédito" },
+        { value: "PIX", label: "PIX" },
+        { value: "Dinheiro", label: "Dinheiro" },
+        { value: "Depósito Bancário", label: "Depósito Bancário" },
+        { value: "Outros", label: "Outros" },
+      ]);
+      setOpcoesSituacao([
+        { value: "", label: "Selecione a situação" },
+        { value: "Ativo", label: "Ativo" },
+        { value: "Cancelado", label: "Cancelado" },
+        { value: "Confirmar", label: "Confirmar" },
+        { value: "Pagamento Pendente", label: "Pagamento Pendente" },
+      ]);
+    }
+  }, [reserva.modalidade]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
   
@@ -79,7 +156,7 @@ const ReservaForm = () => {
       setReserva({ ...reserva, valorReserva: Number(valorNumerico) / 100 });
       setValorReservaFormatado(valorFormatado);
     } else if (name === "valorComissao") {
-      const novoValorComissao = Number(valorNumerico) / 100;
+      const novoValorComissao = reserva.tipoComissao === "R$" ? Number(valorNumerico) / 100 : Number(value) / 100;
       setReserva({ ...reserva, valorComissao: novoValorComissao });
   
       if (reserva.tipoComissao === "%") {
@@ -94,7 +171,6 @@ const ReservaForm = () => {
       setReserva({ ...reserva, [name]: value });
     }
   };
-  
 
   const handleModalidadeChange = (e) => {
     setReserva({ ...reserva, modalidade: e.target.value });
@@ -105,7 +181,7 @@ const handleTipoComissaoChange = (e) => {
 
   let novoValorComissao = reserva.valorComissao;
   if (novoTipoComissao === '%') {
-    novoValorComissao = reserva.valorComissao; // Manter o valor como número para entrada percentual
+    novoValorComissao = 0; // Manter o valor como número para entrada percentual
   } else if (novoTipoComissao === 'R$') {
     novoValorComissao = reserva.tipoComissao === 'R$' ? reserva.valorComissao : 0;
   }
@@ -120,13 +196,14 @@ const handleTipoComissaoChange = (e) => {
 };
 
 const calcularValorFinal = () => {
+  debugger
   const valorReserva = parseFloat(reserva.valorReserva);
   const valorComissao = parseFloat(reserva.valorComissao.toString().replace(',', '.'));
 
   if (isNaN(valorReserva) || isNaN(valorComissao)) {
     return 0;
   }
-debugger
+
   if (reserva.tipoComissao === 'R$') {
     return valorReserva - valorComissao;
   } else {
@@ -251,7 +328,7 @@ debugger
               <label
                 className={`${styles.colSm3} col-form-label ${styles.textRight}`}
               >
-                Início
+                Data de Entrada
               </label>
               <div className={styles.colSm9}>
                 <input
@@ -268,7 +345,7 @@ debugger
               <label
                 className={`${styles.colSm3} col-form-label ${styles.textRight}`}
               >
-                Fim
+                Data de Saida
               </label>
               <div className={styles.colSm9}>
                 <input
@@ -281,235 +358,131 @@ debugger
                 />
               </div>
             </div>
-
-            {/* Campos específicos para Temporada */}
-            {reserva.modalidade === "temporada" && (
-              <>
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
+            <div className={`form-group ${styles.row} ${styles.linha}`}>
+              <label
+                className={`${styles.colSm3} col-form-label ${styles.textRight}`}
+              >
+                Origem
+              </label>
+              <div className={styles.colSm9}>
+                <select
+                  name="origem"
+                  value={reserva.origem}
+                  onChange={handleInputChange}
+                  className="form-control"
+                >
+                  {opcoesOrigem.map((opcao) => (
+                    <option key={opcao.value} value={opcao.value}>
+                      {opcao.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className={`form-group ${styles.row} ${styles.linha}`}>
+              <label
+                className={`${styles.colSm3} col-form-label ${styles.textRight}`}
+              >
+                Forma de Pagamento
+              </label>
+              <div className={styles.colSm9}>
+                <select
+                  name="formaPagamento"
+                  value={reserva.formaPagamento}
+                  onChange={handleInputChange}
+                  className="form-control"
+                >
+                  {opcoesFormaPagamento.map((opcao) => (
+                    <option key={opcao.value} value={opcao.value}>
+                      {opcao.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className={`form-group ${styles.row} ${styles.linha}`}>
+              <label
+                className={`${styles.colSm3} col-form-label ${styles.textRight}`}
+              >
+                Valor da Locação
+              </label>
+              <div className={styles.colSm9}>
+                <input
+                  type="text"
+                  name="valorReserva"
+                  value={valorReservaFormatado}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+            </div>
+            <div className={`form-group ${styles.row} ${styles.linha}`}>
+              <label
+                className={`${styles.colSm3} col-form-label ${styles.textRight}`}
+              >
+                Valor da Comissão
+              </label>
+              <div className={styles.colSm9}>
+                <div className="input-group">
+                  <select
+                    name="tipoComissao"
+                    value={reserva.tipoComissao}
+                    onChange={handleTipoComissaoChange}
+                    className="form-control"
+                    style={{ maxWidth: "60px" }}
                   >
-                    Origem
-                  </label>
-                  <div className={styles.colSm9}>
-                    <select
-                      name="origem"
-                      value={reserva.origem}
-                      onChange={handleInputChange}
-                      className="form-control"
-                    >
-                      <option value="">Selecione a origem</option>
-                      <option value="Airbnb">Airbnb</option>
-                      <option value="Booking">Booking</option>
-                      <option value="Decolar">Decolar</option>
-                      <option value="Outros">Outros</option>
-                    </select>
-                  </div>
-                </div>
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
-                  >
-                    Forma de Pagamento
-                  </label>
-                  <div className={styles.colSm9}>
-                    <select
-                      name="formaPagamento"
-                      value={reserva.formaPagamento}
-                      onChange={handleInputChange}
-                      className="form-control"
-                    >
-                      <option value="">Selecione a forma de pagamento</option>
-                      <option value="Cartão de Crédito">
-                        Cartão de Crédito
-                      </option>
-                      <option value="Boleto">Boleto</option>
-                      <option value="PIX">PIX</option>
-                      <option value="Dinheiro">Dinheiro</option>
-                      <option value="Depósito Bancário">
-                        Depósito Bancário
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
-                  >
-                    Valor da Reserva
-                  </label>
-                  <div className={styles.colSm9}>
-                    <input
-                      type="text"
-                      name="valorReserva"
-                      value={valorReservaFormatado}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
-                  >
-                    Valor da Comissão
-                  </label>
-                  <div className={styles.colSm9}>
-                    <input
-                      type="text"
-                      name="valorComissao"
-                      value={valorComissaoFormatado}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
-                  >
-                    Taxa de Limpeza
-                  </label>
-                  <div className={styles.colSm9}>
-                    <input
-                      type="text"
-                      name="taxaLimpeza"
-                      value={taxaLimpezaFormatado}
-                      onChange={handleInputChange}
-                      className="form-control"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* Campos específicos para Fixa */}
-            {reserva.modalidade === "fixa" && (
-              <>
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
-                  >
-                    Intermediários
-                  </label>
-                  <div className={styles.colSm9}>
-                    <select
-                      name="intermediarios"
-                      value={reserva.intermediarios}
-                      onChange={handleInputChange}
-                      className="form-control"
-                    >
-                      <option value="">Selecione</option>
-                      <option value="Imobiliaria">Imobiliária</option>
-                      <option value="Outros">Outros</option>
-                    </select>
-                  </div>
-                </div>
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
-                  >
-                    Valor do Aluguel
-                  </label>
-                  <div className={styles.colSm9}>
-                    <input
-                      type="text"
-                      name="valorReserva"
-                      value={valorReservaFormatado}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
-                  >
-                    Tipo de Comissão
-                  </label>
-                  <div className={styles.colSm9}>
-                    <div>
-                      <label>
-                        R$
-                        <input
-                          type="radio"
-                          name="tipoComissao"
-                          value="R$"
-                          checked={reserva.tipoComissao === "R$"}
-                          onChange={handleTipoComissaoChange}
-                        />
-                      </label>
-                      <label>
-                        %
-                        <input
-                          type="radio"
-                          name="tipoComissao"
-                          value="%"
-                          checked={reserva.tipoComissao === "%"}
-                          onChange={handleTipoComissaoChange}
-                        />
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
-                  >
-                    Comissão
-                  </label>
-                  <div className={styles.colSm9}>
-                    <input
-                      type="text"
-                      name="valorComissao"
-                      value={valorComissaoFormatado}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
-                  >
-                    Renovação Automática
-                  </label>
-                  <div className={styles.colSm9}>
-                    <select
-                      name="renovacaoAutomatica"
-                      value={reserva.renovacaoAutomatica}
-                      onChange={handleInputChange}
-                      className="form-control"
-                    >
-                      <option value="">Selecione</option>
-                      <option value="Sim">Sim</option>
-                      <option value="Não">Não</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className={`form-group ${styles.row} ${styles.linha}`}>
-                  <label
-                    className={`${styles.colSm3} col-form-label ${styles.textRight}`}
-                  >
-                    Valor Final
-                  </label>
-                  <div className={styles.colSm9}>
+                    <option value="R$">R$</option>
+                    <option value="%">%</option>
+                  </select>
                   <input
                     type="text"
-                    name="valorFinal"
-                    value={formatCurrency(calcularValorFinal())}
+                    name="valorComissao"
+                    value={valorComissaoFormatado}
+                    onChange={handleInputChange}
                     className="form-control"
-                    readOnly
+                    required
                   />
-                  </div>
                 </div>
-              </>
+              </div>
+            </div>
+            {reserva.modalidade === "temporada" && (
+              <>
+            <div className={`form-group ${styles.row} ${styles.linha}`}>
+              <label
+                className={`${styles.colSm3} col-form-label ${styles.textRight}`}
+              >
+                Taxa de Limpeza
+              </label>
+              <div className={styles.colSm9}>
+                <input
+                  type="text"
+                  name="taxaLimpeza"
+                  value={taxaLimpezaFormatado}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+            </div>
+            </>
             )}
+            <div className={`form-group ${styles.row} ${styles.linha}`}>
+              <label
+                className={`${styles.colSm3} col-form-label ${styles.textRight}`}
+              >
+                Valor Final
+              </label>
+              <div className={styles.colSm9}>
+                <input
+                  type="text"
+                  name="valorFinal"
+                  value={formatCurrency(calcularValorFinal())}
+                  className="form-control"
+                  readOnly
+                />
+              </div>
+            </div>
 
             <div className={`form-group ${styles.row} ${styles.linha}`}>
               <label
@@ -519,27 +492,40 @@ debugger
               </label>
               <div className={styles.colSm9}>
                 <select
-                  name="situacao"
+                  name="origem"
                   value={reserva.situacao}
                   onChange={handleInputChange}
                   className="form-control"
                 >
-                  {reserva.modalidade === "temporada" ? (
-                    <>
-                      <option value="PENDENTE">PENDENTE</option>
-                      <option value="CONFIRMADA">CONFIRMADA</option>
-                      <option value="CANCELADA">CANCELADA</option>
-                    </>
-                  ) : (
-                    <>
-                      <option value="ATIVO">ATIVO</option>
-                      <option value="INATIVO">INATIVO</option>
-                    </>
-                  )}
+                  {opcoesSituacao.map((opcao) => (
+                    <option key={opcao.value} value={opcao.value}>
+                      {opcao.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
-
+            {reserva.modalidade === "fixa" && (
+              <>
+            <div className={`form-group ${styles.row} ${styles.linha}`}>
+              <label
+                className={`${styles.colSm3} col-form-label ${styles.textRight}`}
+              >
+                Renovação Automática
+              </label>
+              <div className={styles.colSm9}>
+                <input
+                  type="text"
+                  name="renovacaoAutomatica"
+                  value={reserva.renovacaoAutomatica}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+            </div>
+            </>
+            )}
             <div className={`form-group ${styles.row} ${styles.linha}`}>
               <label
                 className={`${styles.colSm3} col-form-label ${styles.textRight}`}
@@ -552,20 +538,19 @@ debugger
                   value={reserva.observacoes}
                   onChange={handleInputChange}
                   className="form-control"
-                  rows="3"
-                ></textarea>
+                  required
+                />
               </div>
             </div>
+            
 
-            <div className={`form-group ${styles.row} ${styles.linha}`}>
-              <div className={styles.colSm9} style={{ textAlign: "right" }}>
-                <button type="submit" className="btn btn-primary">
-                  {id ? "Atualizar" : "Salvar"}
-                </button>
-                <Link to="/reservas" className="btn btn-secondary ml-2">
-                  Cancelar
-                </Link>
-              </div>
+            <div className="text-center mt-4">
+              <button type="submit" className="btn btn-primary">
+                {id ? "Atualizar" : "Salvar"}
+              </button>
+              <Link to="/reservas" className="btn btn-secondary ml-2">
+                Cancelar
+              </Link>
             </div>
           </form>
         </div>
