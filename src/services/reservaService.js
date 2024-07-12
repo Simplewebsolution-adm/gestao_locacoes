@@ -9,9 +9,10 @@ let reservas = [
       origem: 'BOOKING',    
       formaPagamento: 'BOOKING', 
       valorReserva: 1200.00, 
-      valorComissão: 100.00,
-      valorPago: 0,
-      situacao: 'RESERVADO'
+      valorComissao: 100.00,
+      taxaLimpeza: 0,
+      situacao: 'CONFIRMADA',
+      observacoes: 'TESTE 123'
     },
     { id: 2, 
       clienteId: 2, 
@@ -23,9 +24,10 @@ let reservas = [
       origem: 'FACEBOOK',
       formaPagamento: 'PIX', 
       valorReserva: 1450.00,
-      valorComissão: 0,
-      valorPago: 500.00,
-      situacao: 'RESERVADO'
+      valorComissao: 0.00,
+      taxaLimpeza: 100.00,
+      situacao: 'PENDENTE',
+      observacoes: 'TESTE 123'
     },
     { id: 3, 
       clienteId: 3, 
@@ -37,9 +39,10 @@ let reservas = [
       origem: 'INDICAÇÃO',
       formaPagamento: 'CARTAO', 
       valorReserva: 7450.00,
-      valorComissão: 100.00,
-      valorPago: 7450.00,
-      situacao: 'RESERVADO'
+      valorComissao: 100.00,
+      taxaLimpeza: 120.00,
+      situacao: 'CANCELADA',
+      observacoes: 'TESTE 123'
     },
   ];
   
